@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1482192480 source:c:\users\kalki\documents\codeblocks\oop_exercises\structures\mavsim\main.cpp
+	<iostream>
+	"math.h"
+

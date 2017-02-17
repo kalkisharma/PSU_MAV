@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1487285084 source:c:\users\kalki\desktop\psu_mav-master\psu_mav-master\psu_mav_border\border_dist\main.cpp
+	<iostream>
+	<math.h>
+

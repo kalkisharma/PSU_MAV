@@ -1,16 +1,19 @@
-#include <iostream>
+// Today we're trying to make a path finding algorithm in a 2d array.  We back in this bitch
+
+#include <iostream> 
 #include <math.h>
-const int rows = 3;
-const int columns = 3;
+#include <cmath>
+const int rows = 5;
+const int columns = 5;
 //---------------------------------------------------------
-void print_field(int grid[][columns])
+void print_field(int grid[][columns])	//prints the 2 by 2 array 
 {
 	int i, j;
 	for (i = 0; i < rows; i++) // print the grid
 	{
 		std::cout << "\n";
 		//std::cout << i << std::endl;
-
+		
 		for (j = 0; j < columns; j++)
 		{
 			std::cout << grid[i][j];
@@ -19,26 +22,15 @@ void print_field(int grid[][columns])
 	std::cout << std::endl;
 }
 //---------------------------------------------------------
-int maximum(int x_step[])
+void print_sequence(int grid[])	//prints the 1d array
 {
-	int maxX = x_step[0], i;
-	for (i = 0; i < 3; i++)
+	for (int i = 0; i < rows; i++) // print the grid
 	{
-		if (x_step[i] > maxX)
-		{
-			maxX = x_step[i];
-		}
+			std::cout << grid[i];
 	}
-	return(maxX);
+	std::cout << std::endl;
 }
-//---------------------------------------------------------
-int minimum(int step[])
-{
 
-	int min = step[0];
-
-	return(min);
-}
 //---------------------------------------------------------
 int main()
 {
@@ -46,7 +38,6 @@ int main()
 	int x_start, y_start, x_end, y_end;
 	int x_bomb, y_bomb;
 	//int n;	//number of bombs
-	int maxX, minX;
 	bool userInput = false;
 
 	std::cout << "number of rows: " << rows << std::endl;
@@ -69,18 +60,18 @@ int main()
 		std::cout << "y coordinate of bomb: ";
 		std::cin >> y_bomb;
 	}
-	else if (userInput == false)
+	else if (userInput == false)	//for now the initial conditions are as follows
 	{
-		x_start = 0;
-		y_start = 0;
-		x_end = 2;
-		y_end = 2;
-		x_bomb = 0;
+		x_start = 1;				// these locations are accounting for the boarder of 0's, +1 for each value
+		y_start = 1;
+		x_end = 3;		
+		y_end = 3;
+		x_bomb = 2;
 		y_bomb = 2;
 	}
-	for (i = 0; i < rows; i++)
+	
+	for (i = 0; i < rows; i++)		//set all the values in the array equal to zero
 	{
-
 		for (j = 0; j < columns; j++)
 		{
 			field[i][j] = 0;
@@ -109,7 +100,7 @@ int main()
 	std::cout << "number of bombs: ";
 	std::cin >> n;
 
-	for (k = 0; k < n; k++) //locations of additional bombs
+	for (i = 0; i < n; i++) //locations of additional bombs
 	{
 		std::cout << "x coordinate of bomb: ";
 		std::cin >> x_bomb;
@@ -122,56 +113,60 @@ int main()
 	*/
 	print_field(field);
 
+	float distance;
+	int x_step, y_step;
+	distance = sqrt( (x_end - x_start)*(x_end - x_start) + (y_end - y_start)*(y_end - y_start) );
 
-	int x_step[3], y_step[3]; //move all these to the top
-	int x_min  = 0, x_max = 2, y_min = 0, y_max = 2;
-	int countx = 0, county = 0;
-	x_step[0] = x_start - 1;
-	x_step[1] = x_start;
-	x_step[2] = x_start + 1;
-	y_step[0] = y_start - 1;
-	y_step[1] = y_start;
-	y_step[2] = y_start + 1;
-
-	for (i = 0; i < 3; i++)
+	bool arrived = false;
+	if (arrived == false) // this if statement will happen until the stepper loops land on the goal
 	{
-		if (x_step[i] < x_min || x_step[i] > x_max)
+
+		for (i = x_start - 1; i < x_start + 2; i++)
 		{
-			x_step[i] = -3; // making any value that's out of bound equal to a negative number
-
-			countx = countx + 1;//count the number of steps that are out of bounds
-		}
-	}
-
-	for (i = 0; i < 3; i++)
-	{
-		if (y_step[i] < y_min || y_step[i] > y_max)
-		{
-			y_step[i] = -3; // making any value that's out of bound equal to a negative number
-
-			county = county + 1;//count the number of steps that are out of bounds ie non negative
-		}
-	}
-
-
-	minX = minimum(x_step);
-	std::cout << minX;
-
-
-	maxX = maximum(x_step);
-
-	std::cout << maxX;
-
-	bool illegal;
-	illegal = false;
-
-	for (i = 0; i < 3; i++)
-	{
-		if (x_step[i] < x_min || x_step[i] > x_max)
-		{
-
+			for (j = y_start - 1; j < y_start + 2; j++)
+			{
+				if (field[i][j] == 0 && sqrt((x_end - i)*(x_end - i) + (y_end - j)*(y_end - j)) < distance)
+				{
+					distance = sqrt((x_end - i)*(x_end - i) + (y_end - j)*(y_end - j));
+					x_step = i;
+					y_step = j;
+				}
+			}
 		}
 
+		{
+			for (i = x_step - 1; i < x_step + 2; i++)
+			{
+				for (j = y_step - 1; j < y_step + 2; j++)
+				{
+					if (field[i][j] == 0 && sqrt((x_end - i)*(x_end - i) + (y_end - j)*(y_end - j)) < distance)
+					{
+						distance = sqrt((x_end - i)*(x_end - i) + (y_end - j)*(y_end - j));
+						x_step = i;
+						y_step = j;
+					}
+					if (field[i][j] == 2)
+					{
+						arrived = true;
+					}
+				}
+			}
+			std::cout << x_step << y_step;
+		}
 	}
+	else if (arrived == true) // im having trouble with this else if statement.  It should excecute once the stepper finds the goal. the stepped does indeed find the goal because arrive = true, 
+							//	but the else statement doesn't excecute
+	{
+		std::cout << "WE MADE IT BOYS, WHERE THE CARDI AT?";
+	}
+	if (arrived == true)
+	{
+		std::cout << "we made it";
+	}
+	int pickle = 0;
+
+	
+	// so right now the loop goes through each possible step, checks if the step is valid then computes the distance from the goal. if the step is closer, then it takes that step good
+	// i need to make the step checking part stop once the loop lands on the goal. I'm not sure if that is done with a if statement abo
 
 }//end of int main so don't write anything below this

@@ -31,6 +31,24 @@ void print_sequence(int grid[])							// prints the 1d array
 }
 
 //---------------------------------------------------------
+void path(int start_x, start_y, end_x, end_y)			// finds the shortest path from one point to another
+{
+	float distance = 100000;
+	
+	for (int i = start_x - 1; i < start_x + 2; i++)
+	{
+		for (int j = start_y - 1; j < start_y + 2; j++)
+		{
+			if (sqrt((end_x - i)*(end_x - i) + (end_y - j)*(end_y - j)) < distance)
+			{
+				distance = sqrt((end_x - i)*(end_x - i) + (end_y - j)*(end_y - j));
+				start_x = i;
+				start_y = j;
+			}
+		}
+	}
+
+//---------------------------------------------------------
 int main()
 {
 	int i, j;
@@ -114,7 +132,7 @@ int main()
 	distance = sqrt((x_end - x_start)*(x_end - x_start) + (y_end - y_start)*(y_end - y_start));
 
 	bool arrived = false;								// 
-	if (arrived == false) 
+	if (arrived == false)
 	{
 		for (i = x_start - 1; i < x_start + 2; i++)		// checks all possible steps to see if the move is legal and then compute the distance from the goal.  Whichever step comes the closest to the goal is the one we step to
 		{
@@ -129,25 +147,23 @@ int main()
 			}
 		}
 
+		for (i = x_step - 1; i < x_step + 2; i++)	// this is a similar loop to the one above but starts on a step rather than the starting point. Also this loop will stop once the stepper lands on the goal
 		{
-			for (i = x_step - 1; i < x_step + 2; i++)	// this is a similar loop to the one above but starts on a step rather than the starting point. Also this loop will stop once the stepper lands on the goal
+			for (j = y_step - 1; j < y_step + 2; j++)
 			{
-				for (j = y_step - 1; j < y_step + 2; j++)
+				if (field[i][j] == 0 && sqrt((x_end - i)*(x_end - i) + (y_end - j)*(y_end - j)) < distance)
 				{
-					if (field[i][j] == 0 && sqrt((x_end - i)*(x_end - i) + (y_end - j)*(y_end - j)) < distance)
-					{
-						distance = sqrt((x_end - i)*(x_end - i) + (y_end - j)*(y_end - j));
-						x_step = i;
-						y_step = j;
-					}
-					if (field[i][j] == 2)
-					{
-						arrived = true;
-					}
+					distance = sqrt((x_end - i)*(x_end - i) + (y_end - j)*(y_end - j));
+					x_step = i;
+					y_step = j;
+				}
+				if (field[i][j] == 2)
+				{
+					arrived = true;
 				}
 			}
-			std::cout << x_step << y_step;
 		}
+		std::cout << x_step << y_step;
 	}
 	else if (arrived == true) // im having trouble with this else if statement.  It should excecute once the stepper finds the goal. the stepped does indeed find the goal because arrive = true, 
 							  //	but the else statement doesn't excecute
@@ -159,12 +175,20 @@ int main()
 		std::cout << "we made it";
 	}
 
+}
+
+
+
+
 
 	// so right now the loop goes through each possible step, checks if the step is valid then computes the distance from the goal. if the step is closer, then it takes that step, good
 	// i need to make the step checking part stop once the loop lands on the goal. I'm not sure if that is done with a if statement abo
 
 }//end of int main so don't write anything below this
-
+/*
 ok we're looking pretty good but this algorithm has flaws. It will not work for all grids.  What needs to happen: draw a line from the start to the goal. Then check for bombs along the path.  
-if the path hits a bomb, then there needs to be a check for a way around the bomb. the line will turn into a bent line and there needs to be a check that the new line doesn't cross over any bombs'
+if the path hits a bomb, then there needs to be a check for a way around the bomb.the line will turn into a bent line and there needs to be a check that the new line doesn't cross over any bombs'
 maybe this idea of lines wont work with arrays but for now I'm assuming that this will work :) there will need to be many computations of which point is closer to another point.  
+
+ok so we already made the algorithm for the shortest path from a point to another.That function will be used with an if statement to determine if the path passes through a bomb
+*/

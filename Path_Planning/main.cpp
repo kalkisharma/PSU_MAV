@@ -1,5 +1,5 @@
 #include <iostream> 
-#include <math.h>
+#include <vector>
 #include <cmath>
 const int rows = 9;
 const int columns = 9;
@@ -59,6 +59,7 @@ int main()
 	std::cout << "number of columns: " << columns << std::endl;
 
 	int field[rows][columns];
+	int robot_map[rows][columns];
 
 	if (userInput == true)
 	{
@@ -108,22 +109,51 @@ int main()
 
 	int x_step, y_step;
 	float distance = sqrt((x_end - x_start)*(x_end - x_start) + (y_end - y_start)*(y_end - y_start));
-
+	int diagonal[4][3];
 	bool arrived = false;								
 	if (arrived == false)
 	{
-		for (i = x_start - 1; i < x_start + 2; i++)		// checks all possible steps to see if the move is legal and then compute the distance from the goal.  Whichever step comes the closest to the goal is the one we step to
+		for (i = x_start - 1; i < x_start + 2; i++)		// checks all possible steps 
 		{
 			for (j = y_start - 1; j < y_start + 2; j++)
 			{
-				if (field[i][j] == 0 && sqrt((x_end - i)*(x_end - i) + (y_end - j)*(y_end - j)) < distance)
+				robot_map[i][j] = field[i][j];			// the robot creates its own map of its surroundings for later use.
+
+				if (i == x_start - 1 && j == y_start - 1)		// checks the diagonals and stores the value and the coordinates
 				{
-					distance = sqrt((x_end - i)*(x_end - i) + (y_end - j)*(y_end - j));
-					x_step = i;
-					y_step = j;
+					diagonal[1][0] = field[i][j];
+					diagonal[1][1] = i;
+					diagonal[1][2] = j;
+				}
+				else if (i == x_start - 1 && j == y_start + 1)
+				{
+					diagonal[0][0] = field[i][j];
+					diagonal[0][1] = i;
+					diagonal[0][2] = j;
+				}
+				else if (i == x_start + 1 && j == y_start - 1)
+				{
+					diagonal[2][0] = field[i][j];
+					diagonal[2][1] = i;
+					diagonal[2][2] = j;
+				}
+				else if (i == x_start + 1 && j == y_start + 1)
+				{
+					diagonal[3][0] = field[i][j];
+					diagonal[3][1] = i;
+					diagonal[3][2] = j;
 				}
 			}
 		}
+
+		for (i = 0; i < 4; i++)
+		{
+			if (diagonal[i][0] == 0)
+			{
+
+			}
+		}
+		/*
 
 		for (i = x_step - 1; i < x_step + 2; i++)	// this is a similar loop to the one above but starts on a step rather than the starting point. Also this loop will stop once the stepper lands on the goal
 		{
@@ -143,14 +173,11 @@ int main()
 		}
 		std::cout << x_step << y_step;
 	}
-	else if (arrived == true) // im having trouble with this else if statement.  It should excecute once the stepper finds the goal. the stepped does indeed find the goal because arrive = true, 
-								  //	but the else statement doesn't excecute
-	{
-		std::cout << "WE MADE IT BOYS TO THE GOAL!";
-	}
+
 	if (arrived == true)
 	{
 		std::cout << "we made it";
 	}
-
+	*/
+	}
 }	// ________________________________END OF INT MAIN ________________________________

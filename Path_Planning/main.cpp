@@ -1,3 +1,9 @@
+/*
+Author:  Andrew Miller
+Updated: 9/19/17
+Summary: Prints the feild and the robot's map.  Later the robot will go scouting for the goal
+*/
+
 #include <iostream> 
 #include <vector>
 #include <cmath>
@@ -46,7 +52,7 @@ void path(int start_x, int start_y, int end_x, int end_y)			// finds the shortes
 		}
 	}
 }
-	//---------------------------------------------------------
+//---------------------------------------------------------
 int main()
 {
 	int i, j;
@@ -73,7 +79,7 @@ int main()
 		std::cin >> y_end;
 		std::cout << "x coordinate of bomb: ";
 		std::cin >> x_bomb;
-		std::cout << "y coordinate of bomb: ";	
+		std::cout << "y coordinate of bomb: ";
 		std::cin >> y_bomb;
 	}
 	else if (userInput == false)						// for now the initial conditions are as follows
@@ -84,7 +90,7 @@ int main()
 		y_end = 7;
 	}
 
-	for (i = 0; i < rows; i++)							// set all the values in the array to a 0
+	for (i = 0; i < rows; i++)							// set all the values in the field to a 0 and the boarders to a 4
 	{
 		for (j = 0; j < columns; j++)
 		{
@@ -96,88 +102,62 @@ int main()
 		}
 	}
 
-	field[x_start][y_start] = 1;						// starting location marked with a 1
-	field[x_end][y_end] = 2;							// end location marked with a 2
-	field[x_bomb][y_bomb] = 3;							// bomb location is marked as a 3
-
-	for (i = 3; i < 8; i++)								// makes a wall of bombs
+	for (i = 0; i < rows; i++)							// set all the values in the array to a 0
 	{
-		field[i][4] = 3;
+		for (j = 0; j < columns; j++)
+		{
+			robot_map[i][j] = 0;
+		}
 	}
 
-	print_field(field);									// calls the print grid function
 
+	field[x_start][y_start] = 1;						// starting location marked with a 1
+	field[x_end][y_end] = 2;							// end location marked with a 2
+
+	print_field(field);									// calls the print grid function
+	print_field(robot_map);								// prints the robots' map
 	int x_step, y_step;
 	float distance = sqrt((x_end - x_start)*(x_end - x_start) + (y_end - y_start)*(y_end - y_start));
-	int diagonal[4][3];
-	bool arrived = false;								
-	if (arrived == false)
+
+	for (int n = 0; n < 12; n++)
 	{
-		for (i = x_start - 1; i < x_start + 2; i++)		// checks all possible steps 
+		for (i = x_start - 1; i < x_start + 2, i++)
 		{
-			for (j = y_start - 1; j < y_start + 2; j++)
+			for (j = y_start - 1; j < y_start + 2, j++)
 			{
-				robot_map[i][j] = field[i][j];			// the robot creates its own map of its surroundings for later use.
-
-				if (i == x_start - 1 && j == y_start - 1)		// checks the diagonals and stores the value and the coordinates
+				if (robot_map[i][j] = 0)
 				{
-					diagonal[1][0] = field[i][j];
-					diagonal[1][1] = i;
-					diagonal[1][2] = j;
-				}
-				else if (i == x_start - 1 && j == y_start + 1)
-				{
-					diagonal[0][0] = field[i][j];
-					diagonal[0][1] = i;
-					diagonal[0][2] = j;
-				}
-				else if (i == x_start + 1 && j == y_start - 1)
-				{
-					diagonal[2][0] = field[i][j];
-					diagonal[2][1] = i;
-					diagonal[2][2] = j;
-				}
-				else if (i == x_start + 1 && j == y_start + 1)
-				{
-					diagonal[3][0] = field[i][j];
-					diagonal[3][1] = i;
-					diagonal[3][2] = j;
+					int 
 				}
 			}
 		}
+	}
 
-		for (i = 0; i < 4; i++)
-		{
-			if (diagonal[i][0] == 0)
-			{
-
-			}
-		}
+	
 		/*
 
 		for (i = x_step - 1; i < x_step + 2; i++)	// this is a similar loop to the one above but starts on a step rather than the starting point. Also this loop will stop once the stepper lands on the goal
 		{
-			for (j = y_step - 1; j < y_step + 2; j++)
-			{
-				if (field[i][j] == 0 && sqrt((x_end - i)*(x_end - i) + (y_end - j)*(y_end - j)) < distance)
-				{
-					distance = sqrt((x_end - i)*(x_end - i) + (y_end - j)*(y_end - j));
-					x_step = i;
-					y_step = j;
-				}
-				if (field[i][j] == 2)
-				{
-					arrived = true;
-				}
-			}
+		for (j = y_step - 1; j < y_step + 2; j++)
+		{
+		if (field[i][j] == 0 && sqrt((x_end - i)*(x_end - i) + (y_end - j)*(y_end - j)) < distance)
+		{
+		distance = sqrt((x_end - i)*(x_end - i) + (y_end - j)*(y_end - j));
+		x_step = i;
+		y_step = j;
+		}
+		if (field[i][j] == 2)
+		{
+		arrived = true;
+		}
+		}
 		}
 		std::cout << x_step << y_step;
-	}
+		}
 
-	if (arrived == true)
-	{
+		if (arrived == true)
+		{
 		std::cout << "we made it";
-	}
-	*/
-	}
+		}
+		*/
 }	// ________________________________END OF INT MAIN ________________________________

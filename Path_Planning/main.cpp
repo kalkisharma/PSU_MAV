@@ -1,31 +1,25 @@
 /*
 Author:  Andrew Miller
-Updated: 9/19/17
-Summary: Prints the feild and the robot's map.  Later the robot will go scouting for the goal
+Updated: 9/20/17
+Summary: Prints the field and the robot's map.  Later the robot will go scouting for the goal
+Comments: 1) Change your functions like I modified the function print_field(). Instead of writing the entire
+              function, just write the function declaration and then write the actual function after
+              main()
+          2) Inside main should only be variable declarations (e.g. int x, y). Make everything else functions.
+          3) Replace (x_end - x_start)*(x_end - x_start) with pow(x_end - x_start, 2)
+          4) From lines 114-126 the code is incomplete. Correct the code and after changes 1-3 have been made
+              upload onto Git again.
 */
 
-#include <iostream> 
+#include <iostream>
 #include <vector>
 #include <cmath>
+
 const int rows = 9;
 const int columns = 9;
 //-----------------------------------------------
-void print_field(int grid[][columns])					// prints the 2 by 2 array 
-{
-	int i, j;
-	for (i = 0; i < rows; i++) // print the grid
-	{
-		std::cout << "\n";
-		//std::cout << i << std::endl;
+void print_field(int grid[][columns]);					// prints the 2 by 2 array
 
-		for (j = 0; j < columns; j++)
-		{
-			std::cout << grid[i][j];
-		}
-	}
-	std::cout << std::endl;
-}
-//---------------------------------------------------------
 void print_sequence(int grid[])							// prints the 1d array
 {
 	for (int i = 0; i < rows; i++) // print the grid
@@ -118,7 +112,6 @@ int main()
 	print_field(robot_map);								// prints the robots' map
 	int x_step, y_step;
 	float distance = sqrt((x_end - x_start)*(x_end - x_start) + (y_end - y_start)*(y_end - y_start));
-
 	for (int n = 0; n < 12; n++)
 	{
 		for (i = x_start - 1; i < x_start + 2, i++)
@@ -127,37 +120,26 @@ int main()
 			{
 				if (robot_map[i][j] = 0)
 				{
-					int 
+					int
 				}
 			}
 		}
 	}
-
-	
-		/*
-
-		for (i = x_step - 1; i < x_step + 2; i++)	// this is a similar loop to the one above but starts on a step rather than the starting point. Also this loop will stop once the stepper lands on the goal
-		{
-		for (j = y_step - 1; j < y_step + 2; j++)
-		{
-		if (field[i][j] == 0 && sqrt((x_end - i)*(x_end - i) + (y_end - j)*(y_end - j)) < distance)
-		{
-		distance = sqrt((x_end - i)*(x_end - i) + (y_end - j)*(y_end - j));
-		x_step = i;
-		y_step = j;
-		}
-		if (field[i][j] == 2)
-		{
-		arrived = true;
-		}
-		}
-		}
-		std::cout << x_step << y_step;
-		}
-
-		if (arrived == true)
-		{
-		std::cout << "we made it";
-		}
-		*/
 }	// ________________________________END OF INT MAIN ________________________________
+
+void print_field(int grid[][columns])					// prints the 2 by 2 array
+{
+	int i, j;
+	for (i = 0; i < rows; i++) // print the grid
+	{
+		std::cout << "\n";
+		//std::cout << i << std::endl;
+
+		for (j = 0; j < columns; j++)
+		{
+			std::cout << grid[i][j];
+		}
+	}
+	std::cout << std::endl;
+}
+//---------------------------------------------------------

@@ -1,18 +1,24 @@
 /*
 Author:  Andrew Miller
-Updated: 9/20/17
-Summary: Prints the field and the robot's map.  Later the robot will go scouting for the goal
+Updated: 9/30/17
+Summary: Prints the field and the robot's map.  Then the robot moves around randomly, mapping where it lands until it steps out of bounds.
+The robot map is printed as well as how many steps the robot took.
 Comments: 
+Lines 99-110 is the code that makes the robot step randomly.  I'm not sure how to put that into a function so I'm leaving it in main for now.
+I attempted to create some kind of loop that sends another robot once the current roboot stops but I haven't been successful.
+
 2) Inside main should only be variable declarations (e.g. int x, y). Make everything else functions.
-4) From lines 114-126 the code is incomplete. Correct the code and after changes 1-3 have been made
-upload onto Git again.
+
 */
 
 #include <iostream>
 #include <vector>
 #include <cmath>
 #include <ctime>
+#include <random>
+#include <cstdlib>
 
+using namespace std;
 const int rows = 9;
 const int columns = 9;
 
@@ -28,26 +34,26 @@ int main()
 	//int n;	//number of bombs
 	bool userInput = false;
 
-	std::cout << "number of rows: " << rows << std::endl;
-	std::cout << "number of columns: " << columns << std::endl;
+	cout << "number of rows: " << rows << std::endl;
+	cout << "number of columns: " << columns << std::endl;
 
 	int field[rows][columns];
 	int robot_map[rows][columns];
 
 	if (userInput == true)
 	{
-		std::cout << "\nx coordinate of starting location: ";
-		std::cin >> x_start;
-		std::cout << "y coordinate of starting location: ";
-		std::cin >> y_start;
-		std::cout << "x coordinate of ending location: ";
-		std::cin >> x_end;
-		std::cout << "y coordinate of ending location: ";
-		std::cin >> y_end;
-		std::cout << "x coordinate of bomb: ";
-		std::cin >> x_bomb;
-		std::cout << "y coordinate of bomb: ";
-		std::cin >> y_bomb;
+		cout << "\nx coordinate of starting location: ";
+		cin >> x_start;
+		cout << "y coordinate of starting location: ";
+		cin >> y_start;
+		cout << "x coordinate of ending location: ";
+		cin >> x_end;
+		cout << "y coordinate of ending location: ";
+		cin >> y_end;
+		cout << "x coordinate of bomb: ";
+		cin >> x_bomb;
+		cout << "y coordinate of bomb: ";
+		cin >> y_bomb;
 	}
 	else if (userInput == false)						// for now the initial conditions are as follows
 	{
@@ -73,7 +79,7 @@ int main()
 	{
 		for (j = 0; j < columns; j++)
 		{
-			robot_map[i][j] = 0;
+			robot_map[i][j] = 7;
 		}
 	}
 	
@@ -84,22 +90,25 @@ int main()
 	field[x_end][y_end] = 2;							// end location marked with a 2
 
 	print_field(field);									// calls the print grid function
-	//print_field(robot_map);								// prints the robots' map
-	int x_step, y_step;
-	float distance = sqrt(pow(x_end - x_start, 2) + pow(y_end - y_start, 2));
-	for (int n = 0; n < 12; n++)
+	print_field(robot_map);								// prints the robots' map
+	int x_step, y_step, dx, dy, steps = 0, iteration = 0;
+
+	// Now lets make the robot move around randomly until it reaches the goal or it hits a wall
+	srand((unsigned)time(0));
+	
+	while (field[x_start][y_start] != 2 && field[x_start][y_start] != 4)
 	{
-		for (i = x_start - 1; i < x_start + 2; i++)
-		{
-			for (j = y_start - 1; j < y_start + 2; j++)
-			{
-				if (robot_map[i][j] = 0)
-				{
-					
-				}
-			}
-		}
+		dx = rand() % 3 - 1;
+		dy = rand() % 3 - 1;
+		x_start = x_start + dx;
+		y_start = y_start + dy;
+		robot_map[x_start][y_start] = field[x_start][y_start];
+		steps++;
 	}
+
+	print_field(robot_map);
+	cout << endl << steps;
+
 }	// ________________________________END OF INT MAIN ________________________________
 
 void print_field(int grid[][columns])					// prints the 2 by 2 array
